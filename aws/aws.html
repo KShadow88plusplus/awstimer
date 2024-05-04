@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timer Website</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .container {
+    border: 2px solid #333;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .timer {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .buttons {
+    text-align: center;
+  }
+  
+  button {
+    font-size: 24px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="timer" id="timer">00:00:00:000</div>
+  <div class="buttons">
+    <button id="startStopButton" onclick="startStopTimer()">Start</button>
+    <button onclick="resetTimer()">Reset</button>
+  </div>
+</div>
+<script>
+  let timerInterval;
+  let totalMilliseconds = 0;
+  let timerRunning = false;
+  
+  function startStopTimer() {
+    if (timerRunning) {
+      clearInterval(timerInterval);
+      document.getElementById('startStopButton').innerText = 'Resume';
+      timerRunning = false;
+    } else {
+      timerInterval = setInterval(updateTimer, 10);
+      document.getElementById('startStopButton').innerText = 'Stop';
+      timerRunning = true;
+    }
+  }
+  
+  function resetTimer() {
+    clearInterval(timerInterval);
+    totalMilliseconds = 0;
+    document.getElementById('timer').innerText = '00:00:00:000';
+    document.getElementById('startStopButton').innerText = 'Start';
+    timerRunning = false;
+  }
+  
+  function updateTimer() {
+    totalMilliseconds += 10;
+    const hours = Math.floor(totalMilliseconds / 3600000);
+    const minutes = Math.floor((totalMilliseconds % 3600000) / 60000);
+    const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
+    const milliseconds = totalMilliseconds % 1000;
+    const formattedTime = pad(hours) + ':' + pad(minutes) + ':' + pad(seconds) + ':' + padMilliseconds(milliseconds);
+    document.getElementById('timer').innerText = formattedTime;
+  }
+  
+  function pad(val) {
+    const valString = val + '';
+    if (valString.length < 2) {
+      return '0' + valString;
+    } else {
+      return valString;
+    }
+  }
+  
+  function padMilliseconds(val) {
+    let valString = val + '';
+    while (valString.length < 3) {
+      valString = '0' + valString;
+    }
+    return valString;
+  }
+</script>
+</body>
+</html>
